@@ -1,0 +1,52 @@
+#Play to deploy apache on Ubuntu servers
+- name: configure apache on Ubuntu clients
+  hosts: Ubuntuclients
+  become: true
+  tasks: 
+   - name: Update all packages to their latest version 
+     apt:
+        name: '*'
+        state: latest
+
+   - name: Install apache2
+     apt:
+       name: apache2
+       state: latest
+
+   - name: Create a directory if it does not exist
+     ansible.builtin.file:
+       path: /var/www/chris
+       state: directory
+       mode: '0755'
+
+   - name: Start service apache2, if not started #systemctl start httpd
+     ansible.builtin.service:
+       name: apache2
+       state: started
+
+   - name: Enable service apache2, and not touch the state #systemctl enable httpd
+     ansible.builtin.service:
+       name: apache2
+       enabled: yes
+
+   - name: "UFW firewall allow HTTP on port 80"
+     community.general.ufw:
+        rule: allow
+        port: "80"
+        proto: tcp
+
+   - name: Copy file with owner and permissions #copy file from controller to the clients
+     ansible.builtin.copy:
+        src: /root/index.html #on controller
+        dest: /var/wwww/html/ #on client
+
+- name: install git 
+  hosts: Ubuntuclients
+  tasks: 
+    - name: Install git
+      apt:
+         name: git
+         state: present
+         update_cache: yes
+
+  
