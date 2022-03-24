@@ -5,5 +5,5 @@ This playbook consist of 2 plays:
 - 1 that installs Apache and has 5 modules(apt, file, service, ufw, copy)
 - 1 that installs git and has 1 module(apt)
 
-The playbook is created on a EC2 instance known as the controller 
-and helps to install Apache and git on Ubuntu clients 
+The playbook is created on a EC2 instance known as the Controller 
+and helps to install Apache and git on other EC2 instances known as Clients 
